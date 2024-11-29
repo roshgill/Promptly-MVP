@@ -22,9 +22,12 @@ export function ConversationContexts({ adGroup, onChange }: ConversationContexts
     if (newContext.trim()) {
       onChange({
         ...adGroup,
-        targeting: {
-          ...adGroup.targeting,
-          contexts: [...adGroup.targeting.contexts, newContext.trim()],
+        semanticTargeting: {
+          ...adGroup.semanticTargeting,
+          context: {
+            ...adGroup.semanticTargeting.context,
+            themes: [...adGroup.semanticTargeting.context.themes, { value: newContext.trim(), matchType: "exact" }],
+          },
         },
       });
       setNewContext("");
@@ -34,9 +37,12 @@ export function ConversationContexts({ adGroup, onChange }: ConversationContexts
   const removeContext = (context: string) => {
     onChange({
       ...adGroup,
-      targeting: {
-        ...adGroup.targeting,
-        contexts: adGroup.targeting.contexts.filter((c) => c !== context),
+      semanticTargeting: {
+        ...adGroup.semanticTargeting,
+        context: {
+          ...adGroup.semanticTargeting.context,
+          themes: adGroup.semanticTargeting.context.themes.filter((c) => c.value !== context),
+        },
       },
     });
   };
@@ -45,9 +51,12 @@ export function ConversationContexts({ adGroup, onChange }: ConversationContexts
     if (newExcludedContext.trim()) {
       onChange({
         ...adGroup,
-        targeting: {
-          ...adGroup.targeting,
-          excludedContexts: [...adGroup.targeting.excludedContexts, newExcludedContext.trim()],
+        semanticTargeting: {
+          ...adGroup.semanticTargeting,
+          context: {
+            ...adGroup.semanticTargeting.context,
+            exclusions: [...adGroup.semanticTargeting.context.exclusions, { value: newExcludedContext.trim(), matchType: "exact" }],
+          },
         },
       });
       setNewExcludedContext("");
@@ -57,9 +66,12 @@ export function ConversationContexts({ adGroup, onChange }: ConversationContexts
   const removeExcludedContext = (context: string) => {
     onChange({
       ...adGroup,
-      targeting: {
-        ...adGroup.targeting,
-        excludedContexts: adGroup.targeting.excludedContexts.filter((c) => c !== context),
+      semanticTargeting: {
+        ...adGroup.semanticTargeting,
+        context: {
+          ...adGroup.semanticTargeting.context,
+          exclusions: adGroup.semanticTargeting.context.exclusions.filter((c) => c.value !== context),
+        },
       },
     });
   };
@@ -80,10 +92,10 @@ export function ConversationContexts({ adGroup, onChange }: ConversationContexts
             <Button onClick={addContext}>Add</Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {adGroup.targeting.contexts.map((context) => (
-              <Badge key={context} variant="secondary">
-                {context}
-                <button onClick={() => removeContext(context)} className="ml-2">
+            {adGroup.semanticTargeting.context.themes.map((context) => (
+              <Badge key={context.value} variant="secondary">
+                {context.value}
+                <button onClick={() => removeContext(context.value)} className="ml-2">
                   <X className="w-3 h-3" />
                 </button>
               </Badge>
@@ -103,10 +115,10 @@ export function ConversationContexts({ adGroup, onChange }: ConversationContexts
             <Button onClick={addExcludedContext}>Add</Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {adGroup.targeting.excludedContexts.map((context) => (
-              <Badge key={context} variant="destructive">
-                {context}
-                <button onClick={() => removeExcludedContext(context)} className="ml-2">
+            {adGroup.semanticTargeting.context.exclusions.map((context) => (
+              <Badge key={context.value} variant="destructive">
+                {context.value}
+                <button onClick={() => removeExcludedContext(context.value)} className="ml-2">
                   <X className="w-3 h-3" />
                 </button>
               </Badge>

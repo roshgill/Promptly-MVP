@@ -13,7 +13,10 @@ export interface SemanticTargeting {
       value: string;
       matchType: Extract<MatchType, 'exact' | 'broad'>;
     }>;
-    exclusions: string[];
+    exclusions: Array<{
+      value: string;
+      matchType: Extract<MatchType, 'exact' | 'broad'>;
+    }>;
   };
   intent: Array<{
     value: string;

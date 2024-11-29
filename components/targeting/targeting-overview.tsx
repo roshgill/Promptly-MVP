@@ -49,7 +49,7 @@ export function TargetingOverview({ adGroup }: { adGroup: AdGroup }) {
               <div className="flex flex-wrap gap-2">
                 {adGroup.semanticTargeting.context.exclusions.map((exclusion, index) => (
                   <Badge key={index} variant="destructive">
-                    {exclusion}
+                    {exclusion.value} ({exclusion.matchType})
                   </Badge>
                 ))}
               </div>

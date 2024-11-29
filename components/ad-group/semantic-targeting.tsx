@@ -72,7 +72,10 @@ export function SemanticTargeting({ adGroup, onChange }: SemanticTargetingProps)
           ...adGroup.semanticTargeting,
           context: {
             ...adGroup.semanticTargeting.context,
-            exclusions: [...adGroup.semanticTargeting.context.exclusions, newExclusion.trim()],
+            exclusions: [
+              ...adGroup.semanticTargeting.context.exclusions,
+              { value: newExclusion.trim(), matchType: "exact" }
+            ],
           },
         },
       });
@@ -80,14 +83,16 @@ export function SemanticTargeting({ adGroup, onChange }: SemanticTargetingProps)
     }
   };
 
-  const removeExclusion = (exclusion: string) => {
+  const removeExclusion = (exclusionValue: string) => {
     onChange({
       ...adGroup,
       semanticTargeting: {
         ...adGroup.semanticTargeting,
         context: {
           ...adGroup.semanticTargeting.context,
-          exclusions: adGroup.semanticTargeting.context.exclusions.filter((e) => e !== exclusion),
+          exclusions: adGroup.semanticTargeting.context.exclusions.filter(
+            (exclusion) => exclusion.value !== exclusionValue
+          ),
         },
       },
     });
@@ -197,9 +202,9 @@ export function SemanticTargeting({ adGroup, onChange }: SemanticTargetingProps)
             </div>
             <div className="flex flex-wrap gap-2 mt-2">
               {adGroup.semanticTargeting.context.exclusions.map((exclusion) => (
-                <Badge key={exclusion} variant="destructive">
-                  {exclusion}
-                  <button onClick={() => removeExclusion(exclusion)} className="ml-2">
+                <Badge key={exclusion.value} variant="destructive">
+                  {exclusion.value} ({exclusion.matchType})
+                  <button onClick={() => removeExclusion(exclusion.value)} className="ml-2">
                     <X className="w-3 h-3" />
                   </button>
                 </Badge>
